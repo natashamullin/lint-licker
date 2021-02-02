@@ -50,4 +50,4 @@ class DB {
 
 }
 
-module.export = new DB(connection);
+module.exports = new DB(connection);
