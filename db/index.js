@@ -33,6 +33,11 @@ class DB {
             "SELECT role.id, role.title, department.name AS department, role.salary FROM role LEFT JOIN department on role.department_id = department.id;"
         );
     }
+    createRole(role) {
+        return this.connection.promise().query(
+            " INSERT INTO role SET?", role
+        );
+    }
 
     //find all departments
     findAllDepartments() {

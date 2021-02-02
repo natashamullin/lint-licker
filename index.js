@@ -27,8 +27,12 @@ function mainPrompts() {
                     value: "ADD_EMPLOYEE"
                 },
                 {
-                    name: "View all roles?",
+                    name: "View all roles",
                     value: "ALL_ROLES"
+                },
+                {
+                    name: "Add a role",
+                    value: "ADD_ROLE"
                 },
                 {
                     name: "Update employee role",
@@ -59,6 +63,9 @@ function mainPrompts() {
                     break;
                 case "ALL_ROLES":
                     viewRoles();
+                    break;
+                case "ADD_ROLE":
+                    addRole();
                     break;
                 case "UPDATE_EMPLOYEE":
                     updateEmployee();
@@ -165,7 +172,7 @@ function addEmployee() {
                                                 first_name: first_name,
                                                 last_name: last_name,
                                                 salary: salary,
-                                                department: department
+                                                departments: departments
                                             }
                                             db.creatEmployee(employee);
                                         })
@@ -188,7 +195,41 @@ function viewRoles() {
         })
         .then(() => mainPrompts());
 }
-// add role
+
+// Add a role
+function addRole() {
+    db.findAllDepartments()
+        .then(([rows]) => {
+            let departments = rows;
+            const departmentChoices = departments.map(({ id, name }) => ({
+                name: name,
+                value: id
+            }));
+
+            prompt([
+                {
+                    name: "title",
+                    message: "What is the name of the role?"
+                },
+                {
+                    name: "salary",
+                    message: "What is the salary?"
+                },
+                {
+                    type: "list",
+                    name: "department_id",
+                    message: "Which department is this role in?",
+                    choices: departmentChoices
+                }
+            ])
+                .then(role => {
+                    db.createRole(role)
+                        .then(() => console.log(`Added ${role.title} to the database`))
+                        .then(() => mainPrompts())
+                })
+        })
+}
+//update an employee
 function updateEmployee() {
     db.findAllEmployees()
         .then(([rows]) => {
