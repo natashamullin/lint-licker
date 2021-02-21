@@ -163,8 +163,6 @@ function addEmployee() {
                                         message: "Who is the employee's leader?",
                                         choices: leaderChoices
                                     })
-
-
                                         .then(res => {
                                             let employee = {
                                                 leaderId: res.leaderId,
@@ -172,13 +170,13 @@ function addEmployee() {
                                                 first_name: first_name,
                                                 last_name: last_name,
                                                 salary: salary,
-                                                departments: departments
+                                                departments: ""
                                             }
-                                            db.creatEmployee(employee);
+                                            db.createEmployee(employee)
+                                                .then(() => console.log(`Added ${first_name} ${last_name} to the database`))
+                                                .then(() => mainPrompts())
                                         })
-                                        .then(() => console.log(`Added ${first_name} ${last_name} to the database`
-                                        ))
-                                        .then(() => mainPrompts())
+
                                 });
                         });
 
